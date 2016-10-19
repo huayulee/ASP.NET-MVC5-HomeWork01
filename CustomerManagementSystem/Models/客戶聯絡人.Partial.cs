@@ -15,7 +15,7 @@ namespace CustomerManagementSystem.Models
 
             if(同一客戶下的聯絡人們.FirstOrDefault(x=>x.Email.Equals(this.Email)) != null)
             {
-                yield return new ValidationResult("價格大於1000的商品不可以超過100個!", new string[] { "Stock" });
+                yield return new ValidationResult("Email重複囉!", new string[] { "Stock" });
             }
 
             yield break;
