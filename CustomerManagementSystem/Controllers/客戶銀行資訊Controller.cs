@@ -47,7 +47,7 @@ namespace CustomerManagementSystem.Controllers
         // GET: 客戶銀行資訊/Create
         public ActionResult Create()
         {
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
+            this.GenCustomerList();
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace CustomerManagementSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
+            this.GenCustomerList(客戶銀行資訊.客戶Id);
             return View(客戶銀行資訊);
         }
 
@@ -81,7 +81,7 @@ namespace CustomerManagementSystem.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
+            this.GenCustomerList(客戶銀行資訊.客戶Id);
             return View(客戶銀行資訊);
         }
 
@@ -98,7 +98,7 @@ namespace CustomerManagementSystem.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
+            this.GenCustomerList(客戶銀行資訊.客戶Id);
             return View(客戶銀行資訊);
         }
 
@@ -126,6 +126,12 @@ namespace CustomerManagementSystem.Controllers
             客戶銀行資訊.Is刪除 = true;
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public void GenCustomerList(int defaultValue = -1)
+        {
+            var customers = db.客戶資料.Where(x => x.Is刪除 == false);
+            ViewBag.客戶Id = new SelectList(customers, "Id", "客戶名稱", defaultValue);
         }
 
         protected override void Dispose(bool disposing)

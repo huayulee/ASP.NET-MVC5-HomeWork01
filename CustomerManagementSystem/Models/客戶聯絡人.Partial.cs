@@ -12,7 +12,6 @@ namespace CustomerManagementSystem.Models
         {
             客戶資料Entities db = new 客戶資料Entities();
             var containers = db.客戶聯絡人.Where(x => x.客戶Id == this.客戶Id && x.Email == this.Email && x.Id != this.Id);
-
             
             if (containers != null && containers.ToList().Count > 0)
             {
