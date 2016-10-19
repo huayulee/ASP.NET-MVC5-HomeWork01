@@ -13,6 +13,7 @@ namespace CustomerManagementSystem.Models
             客戶資料Entities db = new 客戶資料Entities();
             var 同一客戶下的聯絡人們 = db.客戶聯絡人.Where(x => x.客戶Id == this.客戶資料.Id);
 
+
             if(同一客戶下的聯絡人們.FirstOrDefault(x=>x.Email.Equals(this.Email)) != null)
             {
                 yield return new ValidationResult("價格大於1000的商品不可以超過100個!", new string[] { "Stock" });
