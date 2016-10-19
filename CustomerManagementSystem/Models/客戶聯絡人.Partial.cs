@@ -11,11 +11,12 @@ namespace CustomerManagementSystem.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             客戶資料Entities db = new 客戶資料Entities();
-            var 同一客戶下的聯絡人們 = db.客戶聯絡人.Where(x => x.客戶Id == this.客戶資料.Id);
+            var containers = db.客戶聯絡人.Where(x => x.客戶Id == this.客戶Id && x.Email == this.Email && x.Id != this.Id);
 
-            if(同一客戶下的聯絡人們.FirstOrDefault(x=>x.Email.Equals(this.Email)) != null)
+            
+            if (containers != null && containers.ToList().Count > 0)
             {
-                yield return new ValidationResult("Email重複囉!", new string[] { "Stock" });
+                yield return new ValidationResult("該Email已經有人使用!", new string[] { "Email" });
             }
 
             yield break;
