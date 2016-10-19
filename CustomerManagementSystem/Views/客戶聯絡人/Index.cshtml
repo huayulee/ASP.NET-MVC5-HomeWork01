@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "客戶聯絡人管理";
+    string key = ViewBag.keyword;
 }
 
 <h2>客戶聯絡人管理</h2>
@@ -44,22 +45,22 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.職稱)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.職稱 : item.職稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.姓名)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.姓名 : item.姓名.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Email)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.Email : item.Email.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.手機)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.手機 : item.手機.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.電話)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.電話 : item.電話.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.客戶資料.客戶名稱)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.客戶資料.客戶名稱 : item.客戶資料.客戶名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
             @Html.ActionLink("編輯", "Edit", new { id=item.Id }) |

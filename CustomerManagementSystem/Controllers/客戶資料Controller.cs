@@ -14,9 +14,16 @@ namespace CustomerManagementSystem.Controllers
     {
         private 客戶資料Entities db = new 客戶資料Entities();
 
+        public ActionResult StatisticsList(string keyword = "")
+        {
+            ViewBag.keyword = keyword ?? string.Empty;
+            return View(db.vw_客戶統計.Where(x => x.客戶名稱.Contains(keyword)));
+        }
+
         // GET: 客戶資料
         public ActionResult Index(string keyword = "")
         {
+            ViewBag.keyword = keyword ?? string.Empty;
             return View(db.客戶資料.Where(x => x.Is刪除 == false && (x.客戶名稱.Contains(keyword) || x.統一編號.Contains(keyword) || x.電話.Contains(keyword) || x.傳真.Contains(keyword) || x.地址.Contains(keyword) || x.Email.Contains(keyword))).ToList());
         }
 

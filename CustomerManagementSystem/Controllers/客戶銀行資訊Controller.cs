@@ -17,16 +17,10 @@ namespace CustomerManagementSystem.Controllers
         // GET: 客戶銀行資訊
         public ActionResult Index(string keyword = "")
         {
-            var 客戶銀行資訊 = db.客戶銀行資訊.Include(客 => 客.客戶資料).Where(x => x.Is刪除 == false && (x.銀行名稱.Contains(keyword) || x.銀行代碼.ToString().Contains(keyword) || x.帳戶名稱.Contains(keyword) || x.帳戶號碼.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword)));
+            ViewBag.keyword = keyword ?? string.Empty;
+            var 客戶銀行資訊 = db.客戶銀行資訊.Include(客 => 客.客戶資料).Where(x => x.Is刪除 == false && (x.銀行名稱.Contains(keyword) || (x.銀行代碼.ToString()).Contains(keyword) || x.帳戶名稱.Contains(keyword) || x.帳戶號碼.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword)));
 
-            int intTmp = -1;
-
-            if (int.TryParse(keyword, out intTmp))
-            {
-                客戶銀行資訊.Where(x => x.銀行代碼.Equals(intTmp) || x.分行代碼.Equals(intTmp));
-            }
-
-            return View(客戶銀行資訊.ToList());
+            return View(客戶銀行資訊);
         }
 
         // GET: 客戶銀行資訊/Details/5

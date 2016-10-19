@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "客戶銀行帳戶管理";
+    string key = ViewBag.keyword;
 }
 
 <h2>客戶銀行帳戶管理</h2>
@@ -44,22 +45,22 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.銀行名稱)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.銀行名稱 : item.銀行名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.銀行代碼)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.銀行代碼.ToString() : item.銀行代碼.ToString().Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.分行代碼)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.帳戶名稱)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.帳戶名稱 : item.帳戶名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.帳戶號碼)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.帳戶號碼 : item.帳戶號碼.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.客戶資料.客戶名稱)
+            @Html.Raw(string.IsNullOrEmpty(key) ? item.客戶資料.客戶名稱 : item.客戶資料.客戶名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
         </td>
         <td>
             @Html.ActionLink("編輯", "Edit", new { id = item.Id }) |

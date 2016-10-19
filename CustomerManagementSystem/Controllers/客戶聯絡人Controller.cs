@@ -14,6 +14,7 @@ namespace CustomerManagementSystem.Controllers
         // GET: 客戶聯絡人
         public ActionResult Index(string keyword = "")
         {
+            ViewBag.keyword = keyword ?? string.Empty;
             var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(x => x.Is刪除 == false && (x.職稱.Contains(keyword) || x.姓名.Contains(keyword) || x.Email.Contains(keyword) || x.手機.Contains(keyword) || x.電話.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword)));
             return View(客戶聯絡人.ToList());
         }

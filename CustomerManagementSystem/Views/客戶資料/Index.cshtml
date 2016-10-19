@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "客戶資料管理";
+    string key = ViewBag.keyword;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -14,7 +15,7 @@
         </span>
     </div>
 </form>
-<br/>
+<br />
 <p>
     @Html.ActionLink("新增客戶資料", "Create")
 </p>
@@ -45,22 +46,22 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.客戶名稱)
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.客戶名稱 : item.客戶名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.統一編號)
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.統一編號 : item.統一編號.Replace(key, string.Format("<mark>{0}</mark>", key)))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.電話)
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.電話 : item.電話.Replace(key, string.Format("<mark>{0}</mark>", key)))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.傳真)
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.傳真 : item.傳真.Replace(key, string.Format("<mark>{0}</mark>", key)))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.地址)
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.地址 : item.地址.Replace(key, string.Format("<mark>{0}</mark>", key)))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.Email : item.Email.Replace(key, string.Format("<mark>{0}</mark>", key)))
             </td>
             <td>
                 @Html.ActionLink("編輯", "Edit", new { id = item.Id }) |
