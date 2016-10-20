@@ -8,6 +8,6 @@ namespace CustomerManagementSystem.Controllers
 {
     public class BaseController : Controller
     {
-        public int defaultPageSize = 2;
+        public int defaultPageSize = 10;
     }
 }
