@@ -4,19 +4,23 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using MvcPaging;
 
 namespace CustomerManagementSystem.Controllers
 {
-    public class 客戶聯絡人Controller : Controller
+    public class 客戶聯絡人Controller : BaseController
     {
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string keyword = "")
+        public ActionResult Index(int? page, string keyword)
         {
-            ViewBag.keyword = keyword ?? string.Empty;
-            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(x => x.Is刪除 == false && (x.職稱.Contains(keyword) || x.姓名.Contains(keyword) || x.Email.Contains(keyword) || x.手機.Contains(keyword) || x.電話.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword)));
-            return View(客戶聯絡人.ToList());
+            keyword = keyword ?? string.Empty;
+            ViewBag.keyword = keyword;
+            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
+            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(x => x.Is刪除 == false && (x.職稱.Contains(keyword) || x.姓名.Contains(keyword) || x.Email.Contains(keyword) || x.手機.Contains(keyword) || x.電話.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword))).OrderBy(x => x.Id).ToPagedList(currentPageIndex, this.defaultPageSize);
+
+            return View(客戶聯絡人);
         }
 
         // GET: 客戶聯絡人/Details/5

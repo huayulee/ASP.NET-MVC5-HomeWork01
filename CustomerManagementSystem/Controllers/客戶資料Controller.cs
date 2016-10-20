@@ -1,30 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using MvcPaging;
 
 namespace CustomerManagementSystem.Controllers
 {
-    public class 客戶資料Controller : Controller
+    public class 客戶資料Controller : BaseController
     {
         private 客戶資料Entities db = new 客戶資料Entities();
 
-        public ActionResult StatisticsList(string keyword = "")
+        public ActionResult StatisticsList(int? page, string keyword)
         {
-            ViewBag.keyword = keyword ?? string.Empty;
-            return View(db.vw_客戶統計.Where(x => x.客戶名稱.Contains(keyword)));
+            keyword = keyword ?? string.Empty;
+            ViewBag.keyword = keyword;
+            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
+            return View(db.vw_客戶統計.Where(x => x.客戶名稱.Contains(keyword)).OrderBy(x => x.客戶名稱).ToPagedList(currentPageIndex, this.defaultPageSize));
         }
 
         // GET: 客戶資料
-        public ActionResult Index(string keyword = "")
+        public ActionResult Index(int? page, string keyword)
         {
-            ViewBag.keyword = keyword ?? string.Empty;
-            return View(db.客戶資料.Where(x => x.Is刪除 == false && (x.客戶名稱.Contains(keyword) || x.統一編號.Contains(keyword) || x.電話.Contains(keyword) || x.傳真.Contains(keyword) || x.地址.Contains(keyword) || x.Email.Contains(keyword))).ToList());
+            keyword = keyword ?? string.Empty;
+            ViewBag.keyword = keyword;
+            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
+            return View(db.客戶資料.Where(x => x.Is刪除 == false && (x.客戶名稱.Contains(keyword) || x.統一編號.Contains(keyword) || x.電話.Contains(keyword) || x.傳真.Contains(keyword) || x.地址.Contains(keyword) || x.Email.Contains(keyword))).OrderBy(x => x.Id).ToPagedList(currentPageIndex, this.defaultPageSize));
         }
 
         // GET: 客戶資料/Details/5
