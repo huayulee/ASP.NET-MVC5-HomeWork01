@@ -12,11 +12,11 @@ namespace CustomerManagementSystem.Controllers
     {
         private 客戶資料Entities db = new 客戶資料Entities();
 
-        public ActionResult StatisticsList(int? page, string keyword)
+        public ActionResult StatisticsList(string keyword, int page = 1)
         {
             keyword = keyword ?? string.Empty;
             ViewBag.keyword = keyword;
-            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
+            int currentPageIndex = page < 1 ? 1 : page;
             return View(db.vw_客戶統計.Where(x => x.客戶名稱.Contains(keyword)).OrderBy(x => x.客戶名稱).ToPagedList(currentPageIndex, this.defaultPageSize));
         }
 

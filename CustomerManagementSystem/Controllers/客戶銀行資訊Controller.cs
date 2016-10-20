@@ -16,11 +16,11 @@ namespace CustomerManagementSystem.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶銀行資訊
-        public ActionResult Index(int? page, string keyword)
+        public ActionResult Index(string keyword, int page = 1)
         {
             keyword = keyword ?? string.Empty;
             ViewBag.keyword = keyword;
-            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
+            int currentPageIndex = page < 1 ? 1 : page;
             var 客戶銀行資訊 = db.客戶銀行資訊.Include(客 => 客.客戶資料).Where(x => x.Is刪除 == false && (x.銀行名稱.Contains(keyword) || (x.銀行代碼.ToString()).Contains(keyword) || x.帳戶名稱.Contains(keyword) || x.帳戶號碼.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword))).OrderBy(x => x.Id).ToPagedList(currentPageIndex, this.defaultPageSize);
 
             return View(客戶銀行資訊);
