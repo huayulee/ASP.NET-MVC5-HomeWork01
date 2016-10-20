@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
-using MvcPaging;
+using PagedList;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -21,11 +21,11 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: 客戶資料
-        public ActionResult Index(int? page, string keyword)
+        public ActionResult Index(string keyword, int page = 1)
         {
             keyword = keyword ?? string.Empty;
             ViewBag.keyword = keyword;
-            int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
+            int currentPageIndex = page < 1 ? 1 : page;
             return View(db.客戶資料.Where(x => x.Is刪除 == false && (x.客戶名稱.Contains(keyword) || x.統一編號.Contains(keyword) || x.電話.Contains(keyword) || x.傳真.Contains(keyword) || x.地址.Contains(keyword) || x.Email.Contains(keyword))).OrderBy(x => x.Id).ToPagedList(currentPageIndex, this.defaultPageSize));
         }
 

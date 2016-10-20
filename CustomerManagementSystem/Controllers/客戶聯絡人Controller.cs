@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
-using MvcPaging;
+using PagedList;
 
 namespace CustomerManagementSystem.Controllers
 {

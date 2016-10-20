@@ -1,4 +1,4 @@
-﻿@using MvcPaging;
+﻿@using PagedList;
 @model IPagedList<CustomerManagementSystem.Models.客戶資料>
 
 @{
@@ -74,12 +74,6 @@
 
 </table>
 <div class="pager">
-    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount).Options(o=>o.AddRouteValue("keyword", key))
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
-@section Scripts{
-    <script>
-    $(document).ready(function () {
-        ////$("#processingDialog").modal('show');
-        });
-</script>
-    }
+

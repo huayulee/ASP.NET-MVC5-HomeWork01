@@ -1,4 +1,4 @@
-﻿@using MvcPaging;
+﻿@using PagedList;
 @model IPagedList<CustomerManagementSystem.Models.vw_客戶統計>
 
 @{
@@ -47,5 +47,5 @@
 
     </table>
 <div class="pager">
-    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount).Options(o => o.AddRouteValue("keyword", key))
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
