@@ -1,0 +1,59 @@
+﻿@model IPagedList<CustomerManagementSystem.Models.客戶銀行資訊>
+
+@{ 
+    string key = ViewBag.keyword;
+    string strDisplay = ViewBag.showEdit == false ? "none" : "";
+}
+
+<table class="table table-striped table-hover">
+    <tr>
+        <th>
+            銀行名稱
+        </th>
+        <th>
+            銀行代碼
+        </th>
+        <th>
+            分行代碼
+        </th>
+        <th>
+            帳戶名稱
+        </th>
+        <th>
+            帳戶號碼
+        </th>
+        <th>
+            客戶名稱
+        </th>
+        <th style="display:@(strDisplay)"></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.銀行名稱 : item.銀行名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
+            </td>
+            <td>
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.銀行代碼.ToString() : item.銀行代碼.ToString().Replace(key, string.Format("<mark>{0}</mark>", key)))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.分行代碼)
+            </td>
+            <td>
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.帳戶名稱 : item.帳戶名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
+            </td>
+            <td>
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.帳戶號碼 : item.帳戶號碼.Replace(key, string.Format("<mark>{0}</mark>", key)))
+            </td>
+            <td>
+                @Html.Raw(string.IsNullOrEmpty(key) ? item.客戶資料.客戶名稱 : item.客戶資料.客戶名稱.Replace(key, string.Format("<mark>{0}</mark>", key)))
+            </td>
+            <td style="display:@(strDisplay)">
+                @Html.ActionLink("編輯", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("詳細內容", "Details", new { id = item.Id }) |
+                @Html.ActionLink("刪除", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>

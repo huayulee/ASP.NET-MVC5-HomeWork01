@@ -67,6 +67,7 @@
             <td>
                 @Html.ActionLink("編輯", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("詳細內容", "Details", new { id = item.Id }) |
+                <a href="javascript:void(0);" onclick="javascript: ShowMe(@item.Id, '@item.客戶名稱');">查看</a> |
                 @Html.ActionLink("刪除", "Delete", new { id = item.Id })
             </td>
         </tr>
@@ -76,4 +77,34 @@
 <div class="pager">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
+
+@section scripts{
+    <script>
+        function ShowMe(id, customerName) {
+
+            $.ajax({
+                url: '@Url.Action("ShowList")',
+                type: "POST",
+                data: { id: id, customerName: customerName },
+                dataType: "html"
+            })
+      .done([AjaxComplete, FunctionWhenDone])
+      .fail([AjaxComplete, FunctionWhenFail]);
+        }
+
+        function AjaxComplete() {
+            $('#modal-dialog').modal('hide');
+        }
+
+        function FunctionWhenDone(html) {
+            $('#modal-dialog-content').html(html);
+            $('#modal-dialog').modal('show');
+        }
+
+        function FunctionWhenFail() {
+            alert("查詢失敗!");
+        }
+
+    </script>
+}
 

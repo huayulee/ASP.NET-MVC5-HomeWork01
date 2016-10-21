@@ -231,6 +231,7 @@
     <Compile Include="Models\sysdiagrams.Partial.cs">
       <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\CustomerInfoViewModel.cs" />
     <Compile Include="Models\vw_客戶統計.cs">
       <DependentUpon>客戶資料.tt</DependentUpon>
     </Compile>
@@ -363,6 +364,9 @@
     <Content Include="Views\客戶銀行資訊\Edit.cshtml" />
     <Content Include="Views\客戶銀行資訊\Index.cshtml" />
     <Content Include="Views\客戶資料\StatisticsList.cshtml" />
+    <Content Include="Views\客戶資料\_ShowList.cshtml" />
+    <Content Include="Views\Shared\_PageList聯絡人.cshtml" />
+    <Content Include="Views\Shared\_PageList銀行資訊.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

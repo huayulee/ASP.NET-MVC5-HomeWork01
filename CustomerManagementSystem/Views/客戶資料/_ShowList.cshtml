@@ -1,0 +1,22 @@
+﻿@model CustomerManagementSystem.Models.ViewModels.CustomerInfoViewModel
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"><strong>@ViewBag.customerName</strong> 的聯絡人及銀行帳戶資訊</h4>
+</div>
+<div class="modal-body">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title">聯絡人</h3>
+        </div>
+        @Html.Partial("_PageList聯絡人", Model.客戶聯絡人s)
+    </div>
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title">銀行資訊</h3>
+        </div>
+        @Html.Partial("_PageList銀行資訊", Model.客戶銀行資訊s)
+    </div>
+</div>

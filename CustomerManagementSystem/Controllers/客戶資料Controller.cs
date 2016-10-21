@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using CustomerManagementSystem.Models.ViewModels;
 using PagedList;
 
 namespace CustomerManagementSystem.Controllers
@@ -27,6 +28,17 @@ namespace CustomerManagementSystem.Controllers
             ViewBag.keyword = keyword;
             int currentPageIndex = page < 1 ? 1 : page;
             return View(db.客戶資料.Where(x => x.Is刪除 == false && (x.客戶名稱.Contains(keyword) || x.統一編號.Contains(keyword) || x.電話.Contains(keyword) || x.傳真.Contains(keyword) || x.地址.Contains(keyword) || x.Email.Contains(keyword))).OrderBy(x => x.Id).ToPagedList(currentPageIndex, this.defaultPageSize));
+        }
+
+        public ActionResult ShowList(int? id, string customerName)
+        {
+            ViewBag.showEdit = false;
+            ViewBag.customerName = customerName;
+            CustomerInfoViewModel viewModel = new CustomerInfoViewModel();
+            viewModel.客戶聯絡人s = db.客戶聯絡人.Where(x => x.Is刪除 == false && x.客戶Id == id).OrderBy(x => x.姓名).ToPagedList(1, int.MaxValue);
+            viewModel.客戶銀行資訊s = db.客戶銀行資訊.Where(x => x.Is刪除 == false && x.客戶Id == id).OrderBy(x => x.銀行代碼).ToPagedList(1, int.MaxValue);
+
+            return PartialView("_ShowList", viewModel);
         }
 
         // GET: 客戶資料/Details/5
