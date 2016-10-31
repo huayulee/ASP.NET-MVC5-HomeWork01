@@ -88,7 +88,7 @@
                 data: { id: id, customerName: customerName },
                 dataType: "html"
             })
-      .done([AjaxComplete, FunctionWhenDone])
+      .done([AjaxComplete, ShowMeDone])
       .fail([AjaxComplete, FunctionWhenFail]);
         }
 
@@ -96,7 +96,7 @@
             $('#modal-dialog').modal('hide');
         }
 
-        function FunctionWhenDone(html) {
+        function ShowMeDone(html) {
             $('#modal-dialog-content').html(html);
             $('#modal-dialog').modal('show');
         }

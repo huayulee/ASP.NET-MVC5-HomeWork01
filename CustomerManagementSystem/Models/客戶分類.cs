@@ -12,29 +12,19 @@ namespace CustomerManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class 客戶資料
+    public partial class 客戶分類
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public 客戶資料()
+        public 客戶分類()
         {
-            this.客戶銀行資訊 = new HashSet<客戶銀行資訊>();
-            this.客戶聯絡人 = new HashSet<客戶聯絡人>();
+            this.客戶資料 = new HashSet<客戶資料>();
         }
     
         public int Id { get; set; }
-        public string 客戶名稱 { get; set; }
-        public string 統一編號 { get; set; }
-        public string 電話 { get; set; }
-        public string 傳真 { get; set; }
-        public string 地址 { get; set; }
-        public string Email { get; set; }
+        public string 分類名稱 { get; set; }
         public bool Is刪除 { get; set; }
-        public Nullable<int> 客戶分類Id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<客戶聯絡人> 客戶聯絡人 { get; set; }
-        public virtual 客戶分類 客戶分類 { get; set; }
+        public virtual ICollection<客戶資料> 客戶資料 { get; set; }
     }
 }
