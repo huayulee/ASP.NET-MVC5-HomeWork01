@@ -35,6 +35,20 @@ namespace CustomerManagementSystem.Models
 			return repository;
 		}		
 
+		public static 客戶分類Repository Get客戶分類Repository()
+		{
+			var repository = new 客戶分類Repository();
+			repository.UnitOfWork = GetUnitOfWork();
+			return repository;
+		}
+
+		public static 客戶分類Repository Get客戶分類Repository(IUnitOfWork unitOfWork)
+		{
+			var repository = new 客戶分類Repository();
+			repository.UnitOfWork = unitOfWork;
+			return repository;
+		}		
+
 		public static 客戶資料Repository Get客戶資料Repository()
 		{
 			var repository = new 客戶資料Repository();

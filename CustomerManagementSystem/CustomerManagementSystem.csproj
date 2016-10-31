@@ -191,6 +191,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\客戶分類Controller.cs" />
     <Compile Include="Controllers\客戶聯絡人Controller.cs" />
     <Compile Include="Controllers\客戶資料Controller.cs" />
     <Compile Include="Controllers\客戶銀行資訊Controller.cs" />
@@ -255,11 +256,20 @@
     <Compile Include="Models\vw_客戶統計.cs">
       <DependentUpon>客戶資料.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\vw_客戶統計.Partial.cs">
+      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\vw_客戶統計Repository.cs">
       <DependentUpon>IRepository.EF6.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶分類.cs">
       <DependentUpon>客戶資料.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\客戶分類.Partial.cs">
+      <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\客戶分類Repository.cs">
+      <DependentUpon>IRepository.EF6.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶聯絡人.cs">
       <DependentUpon>客戶資料.tt</DependentUpon>
@@ -407,6 +417,11 @@
     <Content Include="Views\Shared\_PageList聯絡人.cshtml" />
     <Content Include="Views\Shared\_PageList銀行資訊.cshtml" />
     <Content Include="Views\客戶資料\_Create.cshtml" />
+    <Content Include="Views\客戶分類\Create.cshtml" />
+    <Content Include="Views\客戶分類\Delete.cshtml" />
+    <Content Include="Views\客戶分類\Details.cshtml" />
+    <Content Include="Views\客戶分類\Edit.cshtml" />
+    <Content Include="Views\客戶分類\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

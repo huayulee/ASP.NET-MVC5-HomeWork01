@@ -1,0 +1,48 @@
+﻿@using PagedList;
+@model IPagedList<CustomerManagementSystem.Models.客戶分類>
+
+@{
+    ViewBag.Title = "客戶分類";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form class="form-inline" action="">
+    <div class="input-group">
+        @*<input type="search" name="keyword" id="keyword" class="form-control input-sm" placeholder="請輸入關鍵字" />*@
+        @Html.TextBox("keyword", null, new { @class = "form-control input-sm", @placeholder = "請輸入關鍵字" })
+        <span class="input-group-btn">
+            <input type="submit" value="查詢" class="btn btn-sm btn-default" />
+        </span>
+    </div>
+</form>
+<br />
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().分類名稱)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.分類名稱)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+<div class="pager">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>
