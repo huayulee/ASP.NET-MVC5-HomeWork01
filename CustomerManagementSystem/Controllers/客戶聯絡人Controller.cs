@@ -10,7 +10,9 @@ namespace CustomerManagementSystem.Controllers
 {
     public class 客戶聯絡人Controller : BaseController
     {
-        private 客戶資料Entities db = new 客戶資料Entities();
+        //private 客戶資料Entities db = new 客戶資料Entities();
+        private 客戶聯絡人Repository repo = RepositoryHelper.Get客戶聯絡人Repository();
+        private 客戶資料Repository repo客戶 = RepositoryHelper.Get客戶資料Repository();
 
         // GET: 客戶聯絡人
         public ActionResult Index(string keyword, int page = 1)
@@ -18,7 +20,7 @@ namespace CustomerManagementSystem.Controllers
             keyword = keyword ?? string.Empty;
             ViewBag.keyword = keyword;
             int currentPageIndex = page < 1 ? 1 : page;
-            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(x => x.Is刪除 == false && (x.職稱.Contains(keyword) || x.姓名.Contains(keyword) || x.Email.Contains(keyword) || x.手機.Contains(keyword) || x.電話.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword))).OrderBy(x => x.Id).ToPagedList(currentPageIndex, this.defaultPageSize);
+            var 客戶聯絡人 = this.repo.SelectByKeyWord(keyword).ToPagedList(currentPageIndex, this.defaultPageSize);
 
             return View(客戶聯絡人);
         }
@@ -30,11 +32,14 @@ namespace CustomerManagementSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+
+            //客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = this.repo.Find(id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
             }
+
             return View(客戶聯絡人);
         }
 
@@ -54,8 +59,11 @@ namespace CustomerManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.客戶聯絡人.Add(客戶聯絡人);
-                db.SaveChanges();
+                //db.客戶聯絡人.Add(客戶聯絡人);
+                //db.SaveChanges();
+                this.repo.Add(客戶聯絡人);
+                this.repo.UnitOfWork.Commit();
+
                 return RedirectToAction("Index");
             }
 
@@ -70,11 +78,13 @@ namespace CustomerManagementSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            //客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = this.repo.Find(id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
             }
+
             this.GenCustomerList(客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
@@ -84,14 +94,22 @@ namespace CustomerManagementSystem.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,Is刪除")] 客戶聯絡人 客戶聯絡人)
+        public ActionResult Edit(int id, FormCollection form)
         {
-            if (ModelState.IsValid)
+            var 客戶聯絡人 = this.repo.Find(id);
+            if (TryUpdateModel(客戶聯絡人))
             {
-                db.Entry(客戶聯絡人).State = EntityState.Modified;
-                db.SaveChanges();
+                this.repo.UnitOfWork.Commit();
+
                 return RedirectToAction("Index");
             }
+
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(客戶聯絡人).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
 
             this.GenCustomerList(客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
@@ -104,11 +122,13 @@ namespace CustomerManagementSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            //客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = this.repo.Find(id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
             }
+
             return View(客戶聯絡人);
         }
 
@@ -117,15 +137,19 @@ namespace CustomerManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
-            db.客戶聯絡人.Remove(客戶聯絡人);
-            db.SaveChanges();
+            //客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            //db.客戶聯絡人.Remove(客戶聯絡人);
+            //db.SaveChanges();
+            this.repo.Delete(id);
+            this.repo.UnitOfWork.Commit();
+
             return RedirectToAction("Index");
         }
 
         public void GenCustomerList(int defaultValue = -1)
         {
-            var customers = db.客戶資料.Where(x => x.Is刪除 == false);
+            //var customers = db.客戶資料.Where(x => x.Is刪除 == false);
+            var customers = this.repo客戶.All();
             ViewBag.客戶Id = new SelectList(customers, "Id", "客戶名稱", defaultValue);
         }
 
@@ -133,7 +157,8 @@ namespace CustomerManagementSystem.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
+                this.repo.UnitOfWork.Context.Dispose();
             }
             base.Dispose(disposing);
         }

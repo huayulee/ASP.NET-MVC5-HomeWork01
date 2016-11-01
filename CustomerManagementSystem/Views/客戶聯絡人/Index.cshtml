@@ -9,7 +9,8 @@
 
 <form class="form-inline" action="">
     <div class="input-group">
-        <input type="search" name="keyword" id="keyword" class="form-control input-sm" placeholder="請輸入關鍵字" />
+        @*<input type="search" name="keyword" id="keyword" class="form-control input-sm" placeholder="請輸入關鍵字" />*@
+        @Html.TextBox("keyword", null, new { @class = "form-control input-sm", @placeholder = "請輸入關鍵字" })
         <span class="input-group-btn">
             <input type="submit" value="查詢" class="btn btn-sm btn-default" />
         </span>
