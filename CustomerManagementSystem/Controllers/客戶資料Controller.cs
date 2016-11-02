@@ -16,6 +16,7 @@ namespace CustomerManagementSystem.Controllers
         private 客戶聯絡人Repository repo客戶聯絡人 = RepositoryHelper.Get客戶聯絡人Repository();
         private 客戶銀行資訊Repository repo客戶銀行資訊 = RepositoryHelper.Get客戶銀行資訊Repository();
         private vw_客戶統計Repository repoVW = RepositoryHelper.Getvw_客戶統計Repository();
+        private 客戶分類Repository repo客戶分類 = RepositoryHelper.Get客戶分類Repository();
 
         public ActionResult StatisticsList(string keyword, int page = 1)
         {
@@ -60,6 +61,7 @@ namespace CustomerManagementSystem.Controllers
                 return HttpNotFound();
             }
 
+            this.GenCustomerList(客戶資料.客戶分類Id ?? 0);
             return View(客戶資料);
         }
 
@@ -87,6 +89,7 @@ namespace CustomerManagementSystem.Controllers
                 return RedirectToAction("Index");
             }
 
+            this.GenCustomerList();
             return View(客戶資料);
         }
 
@@ -105,6 +108,7 @@ namespace CustomerManagementSystem.Controllers
                 return HttpNotFound();
             }
 
+            this.GenCustomerList(客戶資料.客戶分類Id ?? 0);
             return View(客戶資料);
         }
 
@@ -142,6 +146,7 @@ namespace CustomerManagementSystem.Controllers
                 return HttpNotFound();
             }
 
+            this.GenCustomerList(客戶資料.客戶分類Id ?? 0);
             return View(客戶資料);
         }
 
@@ -163,6 +168,12 @@ namespace CustomerManagementSystem.Controllers
             this.repo客戶銀行資訊.UnitOfWork.Commit();
 
             return RedirectToAction("Index");
+        }
+
+        public void GenCustomerList(int defaultValue = -1)
+        {
+            var data = this.repo客戶分類.All().OrderBy(p => p.分類名稱);
+            ViewBag.客戶分類Id = new SelectList(data, "Id", "分類名稱", defaultValue);
         }
 
         protected override void Dispose(bool disposing)
