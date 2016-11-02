@@ -27,12 +27,13 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: 客戶資料
-        public ActionResult Index(string keyword, int page = 1)
+        public ActionResult Index(string keyword, int? 客戶分類Id, int page = 1)
         {
+            this.GenCustomerList(客戶分類Id);
             keyword = keyword ?? string.Empty;
             ViewBag.keyword = keyword;
             int currentPageIndex = page < 1 ? 1 : page;
-            return View(this.repo.SelectByKeyWord(keyword).ToPagedList(currentPageIndex, this.defaultPageSize));
+            return View(this.repo.SelectByKeyWord(keyword, 客戶分類Id).ToPagedList(currentPageIndex, this.defaultPageSize));
         }
 
         public ActionResult ShowList(int? id, string customerName)
@@ -68,7 +69,7 @@ namespace CustomerManagementSystem.Controllers
         // GET: 客戶資料/Create
         public ActionResult Create()
         {
-            this.GenCustomerList();
+            this.GenCustomerList(null);
             return View();
         }
 
@@ -90,7 +91,7 @@ namespace CustomerManagementSystem.Controllers
                 return RedirectToAction("Index");
             }
 
-            this.GenCustomerList();
+            this.GenCustomerList(null);
             return View(客戶資料);
         }
 
@@ -109,7 +110,7 @@ namespace CustomerManagementSystem.Controllers
                 return HttpNotFound();
             }
 
-            this.GenCustomerList(客戶資料.客戶分類Id ?? 0);
+            this.GenCustomerList(客戶資料.客戶分類Id);
             return View(客戶資料);
         }
 
@@ -147,7 +148,7 @@ namespace CustomerManagementSystem.Controllers
                 return HttpNotFound();
             }
 
-            this.GenCustomerList(客戶資料.客戶分類Id ?? 0);
+            this.GenCustomerList(客戶資料.客戶分類Id);
             return View(客戶資料);
         }
 
@@ -171,7 +172,7 @@ namespace CustomerManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        public void GenCustomerList(int defaultValue = -1)
+        public void GenCustomerList(int? defaultValue)
         {
             var data = this.repo客戶分類.All().OrderBy(p => p.分類名稱);
             ViewBag.客戶分類Id = new SelectList(data, "Id", "分類名稱", defaultValue);

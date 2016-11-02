@@ -27,9 +27,15 @@ namespace CustomerManagementSystem.Models
             return this.All().FirstOrDefault(p => p.Id == id);
         }
 
-        public IQueryable<客戶資料> SelectByKeyWord(string keyword)
+        public IQueryable<客戶資料> SelectByKeyWord(string keyword, int? 客戶分類Id)
         {
-            return this.All().Where(x => x.Is刪除 == false && (x.客戶名稱.Contains(keyword) || x.統一編號.Contains(keyword) || x.電話.Contains(keyword) || x.傳真.Contains(keyword) || x.地址.Contains(keyword) || x.Email.Contains(keyword))).OrderBy(x => x.Id);
+            var data = this.All().Where(p => (p.客戶名稱.Contains(keyword) || p.統一編號.Contains(keyword) || p.電話.Contains(keyword) || p.傳真.Contains(keyword) || p.地址.Contains(keyword) || p.Email.Contains(keyword)));
+            if (客戶分類Id != null)
+            {
+                data = data.Where(p => p.客戶分類Id == 客戶分類Id);
+            }
+
+            return data.OrderBy(p => p.Id);
         }
     }
 
