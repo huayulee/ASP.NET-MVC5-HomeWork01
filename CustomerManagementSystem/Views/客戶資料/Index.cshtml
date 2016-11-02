@@ -10,6 +10,7 @@
 
 <form class="form-inline" action="">
     <div class="input-group">
+
         <input type="search" name="keyword" id="keyword" class="form-control input-sm" placeholder="請輸入關鍵字" />
         <span class="input-group-btn">
             <input type="submit" value="查詢" class="btn btn-sm btn-default" />
@@ -41,7 +42,7 @@
             Email
         </th>
         <th>
-            @Html.DisplayFor(model => model.FirstOrDefault().客戶分類.分類名稱)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().客戶分類.分類名稱)
         </th>
         <th></th>
     </tr>
@@ -68,18 +69,7 @@
                 @Html.Raw(string.IsNullOrEmpty(key) ? item.Email : item.Email.Replace(key, string.Format("<mark>{0}</mark>", key)))
             </td>
             <td>
-                @if (item.客戶分類 != null)
-                {
-                    if (item.客戶分類.分類名稱 != null)
-                    {
-                        Html.Raw(string.IsNullOrEmpty(key) ? item.客戶分類.分類名稱 : item.客戶分類.分類名稱.Replace(key, string.Format("<mark>{0}</mark>", key)));
-                    }
-                    else
-                    {
-                        Html.DisplayFor(x => item.客戶分類.分類名稱);
-
-                    }
-                }
+                @Html.DisplayFor(modelItem => item.客戶分類.分類名稱)
             </td>
             <td>
                 @Html.ActionLink("編輯", "Edit", new { id = item.Id }) |
