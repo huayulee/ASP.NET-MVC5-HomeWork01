@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using CustomerManagementSystem.Models;
 using CustomerManagementSystem.Models.ViewModels;
 using PagedList;
+using NPOI;
+using NPOI.HSSF.UserModel;
+using System.IO;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -170,6 +173,52 @@ namespace CustomerManagementSystem.Controllers
             this.repo客戶銀行資訊.UnitOfWork.Commit();
 
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Export(string keyword, int? 客戶分類Id)
+        {
+            var workbook = new HSSFWorkbook();
+            var sheet = workbook.CreateSheet("客戶資料");
+            var rowIndex = 0;
+            var row = sheet.CreateRow(rowIndex);
+            row.CreateCell(0).SetCellValue("客戶名稱");
+            row.CreateCell(1).SetCellValue("統一編號");
+            row.CreateCell(2).SetCellValue("電話");
+            row.CreateCell(3).SetCellValue("傳真");
+            row.CreateCell(4).SetCellValue("地址");
+            row.CreateCell(5).SetCellValue("Email");
+            row.CreateCell(6).SetCellValue("分類名稱");
+            rowIndex++;
+
+            IQueryable<客戶資料> data = this.repo.SelectByKeyWord(keyword, 客戶分類Id);
+
+            foreach (var item in data)
+            {
+                row = sheet.CreateRow(rowIndex);
+                row.CreateCell(0).SetCellValue(item.客戶名稱);
+                row.CreateCell(1).SetCellValue(item.統一編號);
+                row.CreateCell(2).SetCellValue(item.電話);
+                row.CreateCell(3).SetCellValue(item.傳真);
+                row.CreateCell(4).SetCellValue(item.地址);
+                row.CreateCell(5).SetCellValue(item.Email);
+                string category = item.客戶分類 == null ? string.Empty : item.客戶分類.分類名稱 ?? string.Empty;
+                row.CreateCell(6).SetCellValue(category);
+
+                rowIndex++;
+            }
+
+            //using (var fileData = new FileStream("客戶資料.xlsx", FileMode.Create))
+            //{
+            //    workbook.Write(fileData);
+            //}
+            byte[] resultData;
+            using (var exportData = new MemoryStream())
+            {
+                workbook.Write(exportData);
+                resultData = exportData.ToArray();
+            }
+
+            return File(resultData, "application/vnd.ms-excel", "abc.xls");
         }
 
         public void GenCustomerList(int? defaultValue)

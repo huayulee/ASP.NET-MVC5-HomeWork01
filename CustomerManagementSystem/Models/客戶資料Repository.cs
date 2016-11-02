@@ -29,6 +29,7 @@ namespace CustomerManagementSystem.Models
 
         public IQueryable<客戶資料> SelectByKeyWord(string keyword, int? 客戶分類Id)
         {
+            keyword = keyword ?? string.Empty;
             var data = this.All().Where(p => (p.客戶名稱.Contains(keyword) || p.統一編號.Contains(keyword) || p.電話.Contains(keyword) || p.傳真.Contains(keyword) || p.地址.Contains(keyword) || p.Email.Contains(keyword)));
             if (客戶分類Id != null)
             {
