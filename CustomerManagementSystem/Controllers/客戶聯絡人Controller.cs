@@ -15,12 +15,13 @@ namespace CustomerManagementSystem.Controllers
         private 客戶資料Repository repo客戶 = RepositoryHelper.Get客戶資料Repository();
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string keyword, int page = 1)
+        public ActionResult Index(string keyword, string 職稱, int page = 1)
         {
+            this.Gen職稱List();
             keyword = keyword ?? string.Empty;
             ViewBag.keyword = keyword;
             int currentPageIndex = page < 1 ? 1 : page;
-            var 客戶聯絡人 = this.repo.SelectByKeyWord(keyword).ToPagedList(currentPageIndex, this.defaultPageSize);
+            var 客戶聯絡人 = this.repo.SelectByKeyWord(keyword, 職稱).ToPagedList(currentPageIndex, this.defaultPageSize);
 
             return View(客戶聯絡人);
         }
@@ -151,6 +152,12 @@ namespace CustomerManagementSystem.Controllers
             //var customers = db.客戶資料.Where(x => x.Is刪除 == false);
             var customers = this.repo客戶.All();
             ViewBag.客戶Id = new SelectList(customers, "Id", "客戶名稱", defaultValue);
+        }
+
+        public void Gen職稱List()
+        {
+            var options = (from p in this.repo.All() select p.職稱).Distinct().OrderBy(p => p);
+            ViewBag.職稱 = new SelectList(options);
         }
 
         protected override void Dispose(bool disposing)

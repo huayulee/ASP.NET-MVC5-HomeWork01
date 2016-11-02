@@ -24,16 +24,21 @@ namespace CustomerManagementSystem.Models
 
         public void Delete客戶的所有聯絡人By客戶Id(int 客戶Id)
         {
-            var 客戶聯絡人們 = this.All().Where(x => x.客戶Id == 客戶Id);
+            var 客戶聯絡人們 = this.All().Where(p => p.客戶Id == 客戶Id);
             foreach (客戶聯絡人 item in 客戶聯絡人們)
             {
                 this.Delete(item.Id);
             }
         }
 
-        public IQueryable<客戶聯絡人> SelectByKeyWord(string keyword)
+        public IQueryable<客戶聯絡人> SelectByKeyWord(string keyword, string 職稱)
         {
-            return this.All().Where(x => (x.職稱.Contains(keyword) || x.姓名.Contains(keyword) || x.Email.Contains(keyword) || x.手機.Contains(keyword) || x.電話.Contains(keyword) || x.客戶資料.客戶名稱.Contains(keyword))).OrderBy(x => x.Id);
+            var data = this.All().Where(p => (p.姓名.Contains(keyword) || p.Email.Contains(keyword) || p.手機.Contains(keyword) || p.電話.Contains(keyword) || p.客戶資料.客戶名稱.Contains(keyword)));
+            if (!string.IsNullOrEmpty(職稱))
+            {
+                data = data.Where(p => p.職稱 == 職稱);
+            }
+            return data.OrderBy(p => p.Id);
         }
 
         public 客戶聯絡人 Find(int id)
