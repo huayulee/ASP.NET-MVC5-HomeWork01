@@ -1,9 +1,12 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using NPOI.HSSF.UserModel;
 using PagedList;
 
 namespace CustomerManagementSystem.Controllers
@@ -145,6 +148,47 @@ namespace CustomerManagementSystem.Controllers
             this.repo.UnitOfWork.Commit();
 
             return RedirectToAction("Index");
+        }
+
+        public FileResult Export(string keyword, string 職稱)
+        {
+            string tit = "客戶聯絡人";
+            var workbook = new HSSFWorkbook();
+            var sheet = workbook.CreateSheet("客戶聯絡人");
+            var rowIndex = 0;
+            var row = sheet.CreateRow(rowIndex);
+            row.CreateCell(0).SetCellValue("職稱");
+            row.CreateCell(1).SetCellValue("姓名");
+            row.CreateCell(2).SetCellValue("Email");
+            row.CreateCell(3).SetCellValue("手機");
+            row.CreateCell(4).SetCellValue("電話");
+            row.CreateCell(5).SetCellValue("客戶名稱");
+            rowIndex++;
+
+            IQueryable<客戶聯絡人> data = this.repo.SelectByKeyWord(keyword, 職稱);
+
+            foreach (var item in data)
+            {
+                row = sheet.CreateRow(rowIndex);
+                row.CreateCell(0).SetCellValue(item.職稱);
+                row.CreateCell(1).SetCellValue(item.姓名);
+                row.CreateCell(2).SetCellValue(item.Email);
+                row.CreateCell(3).SetCellValue(item.手機);
+                row.CreateCell(4).SetCellValue(item.電話);
+                string category = item.客戶資料 == null ? string.Empty : item.客戶資料.客戶名稱 ?? string.Empty;
+                row.CreateCell(5).SetCellValue(category);
+
+                rowIndex++;
+            }
+
+            byte[] resultData;
+            using (var exportData = new MemoryStream())
+            {
+                workbook.Write(exportData);
+                resultData = exportData.ToArray();
+            }
+
+            return File(resultData, "application/vnd.ms-excel", string.Format("{0}_{1}.xls", tit, DateTime.Now.ToString("yyyyMMddhhmmss")));
         }
 
         public void GenCustomerList(int defaultValue = -1)

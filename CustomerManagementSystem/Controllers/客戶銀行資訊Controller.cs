@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CustomerManagementSystem.Models;
+using NPOI.HSSF.UserModel;
 using PagedList;
 
 namespace CustomerManagementSystem.Controllers
@@ -155,6 +157,47 @@ namespace CustomerManagementSystem.Controllers
             this.repo.UnitOfWork.Commit();
 
             return RedirectToAction("Index");
+        }
+
+        public FileResult Export(string keyword)
+        {
+            string tit = "客戶銀行帳戶";
+            var workbook = new HSSFWorkbook();
+            var sheet = workbook.CreateSheet(tit);
+            var rowIndex = 0;
+            var row = sheet.CreateRow(rowIndex);
+            row.CreateCell(0).SetCellValue("銀行名稱");
+            row.CreateCell(1).SetCellValue("銀行代碼");
+            row.CreateCell(2).SetCellValue("分行代碼");
+            row.CreateCell(3).SetCellValue("帳戶名稱");
+            row.CreateCell(4).SetCellValue("帳戶號碼");
+            row.CreateCell(5).SetCellValue("客戶名稱");
+            rowIndex++;
+
+            IQueryable<客戶銀行資訊> data = this.repo.SelectByKeyWord(keyword);
+
+            foreach (var item in data)
+            {
+                row = sheet.CreateRow(rowIndex);
+                row.CreateCell(0).SetCellValue(item.銀行名稱);
+                row.CreateCell(1).SetCellValue(item.銀行代碼);
+                row.CreateCell(2).SetCellValue(item.分行代碼 == null ? string.Empty : item.分行代碼.ToString());
+                row.CreateCell(3).SetCellValue(item.帳戶名稱);
+                row.CreateCell(4).SetCellValue(item.帳戶號碼);
+                string category = item.客戶資料 == null ? string.Empty : item.客戶資料.客戶名稱 ?? string.Empty;
+                row.CreateCell(5).SetCellValue(category);
+
+                rowIndex++;
+            }
+
+            byte[] resultData;
+            using (var exportData = new MemoryStream())
+            {
+                workbook.Write(exportData);
+                resultData = exportData.ToArray();
+            }
+
+            return File(resultData, "application/vnd.ms-excel", string.Format("{0}_{1}.xls", tit, DateTime.Now.ToString("yyyyMMddhhmmss")));
         }
 
         public void GenCustomerList(int defaultValue = -1)

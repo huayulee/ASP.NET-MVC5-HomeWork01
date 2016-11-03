@@ -19,9 +19,17 @@
 </form>
 <br />
 <p>
-    @Html.ActionLink("新增客戶銀行帳戶", "Create")
+    @Html.ActionLink("新增客戶銀行帳戶", "Create")｜
+    <a href="javascript:void(0);" onclick="Export();">匯出</a>
 </p>
 @Html.Partial("_PageList銀行資訊")
 <div class="pager">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
+@section scripts{
+    <script>
+        function Export() {
+            location.href = '@Url.Action("Export")' + '?keyword=@(ViewBag.keyword)';
+        }
+    </script>
+}

@@ -9,6 +9,7 @@ using PagedList;
 using NPOI;
 using NPOI.HSSF.UserModel;
 using System.IO;
+using System;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -175,8 +176,9 @@ namespace CustomerManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Export(string keyword, int? 客戶分類Id)
+        public FileResult Export(string keyword, int? 客戶分類Id)
         {
+            string tit = "客戶資料";
             var workbook = new HSSFWorkbook();
             var sheet = workbook.CreateSheet("客戶資料");
             var rowIndex = 0;
@@ -207,10 +209,6 @@ namespace CustomerManagementSystem.Controllers
                 rowIndex++;
             }
 
-            //using (var fileData = new FileStream("客戶資料.xlsx", FileMode.Create))
-            //{
-            //    workbook.Write(fileData);
-            //}
             byte[] resultData;
             using (var exportData = new MemoryStream())
             {
@@ -218,7 +216,42 @@ namespace CustomerManagementSystem.Controllers
                 resultData = exportData.ToArray();
             }
 
-            return File(resultData, "application/vnd.ms-excel", "abc.xls");
+            return File(resultData, "application/vnd.ms-excel", string.Format("{0}_{1}.xls", tit, DateTime.Now.ToString("yyyyMMddhhmmss")));
+        }
+
+        public FileResult ExportList(string keyword)
+        {
+            string tit = "清單";
+            var workbook = new HSSFWorkbook();
+            var sheet = workbook.CreateSheet("清單");
+            var rowIndex = 0;
+            var row = sheet.CreateRow(rowIndex);
+            row.CreateCell(0).SetCellValue("客戶名稱");
+            row.CreateCell(1).SetCellValue("聯絡人數量");
+            row.CreateCell(2).SetCellValue("銀行帳戶數量");
+
+            rowIndex++;
+
+            IQueryable<vw_客戶統計> data = this.repoVW.SelectByKeyWord(keyword);
+
+            foreach (var item in data)
+            {
+                row = sheet.CreateRow(rowIndex);
+                row.CreateCell(0).SetCellValue(item.客戶名稱);
+                row.CreateCell(1).SetCellValue(item.聯絡人數量 == null ? 0 : item.聯絡人數量.Value);
+                row.CreateCell(2).SetCellValue(item.銀行帳戶數量 == null ? 0 : item.銀行帳戶數量.Value);
+
+                rowIndex++;
+            }
+
+            byte[] resultData;
+            using (var exportData = new MemoryStream())
+            {
+                workbook.Write(exportData);
+                resultData = exportData.ToArray();
+            }
+
+            return File(resultData, "application/vnd.ms-excel", string.Format("{0}_{1}.xls", tit, DateTime.Now.ToString("yyyyMMddhhmmss")));
         }
 
         public void GenCustomerList(int? defaultValue)

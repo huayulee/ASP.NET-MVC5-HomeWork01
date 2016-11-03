@@ -19,9 +19,18 @@
 </form>
 <br />
 <p>
-    @Html.ActionLink("新增客戶聯絡人", "Create")
+    @Html.ActionLink("新增客戶聯絡人", "Create")｜
+    <a href="javascript:void(0);" onclick="Export();">匯出</a>
 </p>
 @Html.Partial("_PageList聯絡人")
 <div class="pager">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
+@section scripts{
+    <script>
+        function Export() {
+            var cateId = $('[name=職稱]').val();
+            location.href = '@Url.Action("Export")' + '/?職稱=' + cateId + '&keyword=@(ViewBag.keyword)';
+        }
+    </script>
+}

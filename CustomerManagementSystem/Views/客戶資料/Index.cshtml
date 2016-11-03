@@ -20,7 +20,7 @@
 <br />
 <p>
     @Html.ActionLink("新增客戶資料", "Create")｜
-    @Html.ActionLink("匯出", "Export")
+    <a href="javascript:void(0);" onclick="Export();">匯出</a>
 </p>
 <table class="table table-striped table-hover">
     <tr>
@@ -113,6 +113,10 @@
             alert("查詢失敗!");
         }
 
+        function Export() {
+            var cateId = $('[name=客戶分類Id]').val();
+            location.href = '@Url.Action("Export")' + '/?客戶分類Id=' + cateId + '&keyword=@(key)';
+        }
     </script>
 }
 

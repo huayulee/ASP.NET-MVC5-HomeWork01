@@ -17,7 +17,7 @@
         </span>
     </div>
 </form>
-<p></p>
+<p><a href="javascript:void(0);" onclick="Export();">匯出</a></p>
 <table class="table table-striped table-hover">
         <tr>
             <th>
@@ -48,5 +48,12 @@
 
     </table>
 <div class="pager">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    @Html.PagedListPager(Model, page => Url.Action("StatisticsList", new { page }))
 </div>
+@section scripts{
+    <script>
+        function Export() {
+            location.href = '@Url.Action("ExportList")' + '?keyword=@(ViewBag.keyword)';
+        }
+    </script>
+}
