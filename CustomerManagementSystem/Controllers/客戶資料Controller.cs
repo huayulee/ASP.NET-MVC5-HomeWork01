@@ -10,6 +10,7 @@ using NPOI;
 using NPOI.HSSF.UserModel;
 using System.IO;
 using System;
+using System.Collections.Generic;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -252,6 +253,25 @@ namespace CustomerManagementSystem.Controllers
             }
 
             return File(resultData, "application/vnd.ms-excel", string.Format("{0}_{1}.xls", tit, DateTime.Now.ToString("yyyyMMddhhmmss")));
+        }
+
+        [HttpPost]
+        public ActionResult BatchUpdate(IList<客戶聯絡人> items)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var item in items)
+                {
+                    var 客戶聯絡人 = this.repo客戶聯絡人.Find(item.Id);
+                    客戶聯絡人.職稱 = item.職稱;
+                    客戶聯絡人.手機 = item.手機;
+                    客戶聯絡人.電話 = item.電話;
+                }
+
+                this.repo客戶聯絡人.UnitOfWork.Commit();
+            }
+
+            return RedirectToAction("Index");
         }
 
         public void GenCustomerList(int? defaultValue)

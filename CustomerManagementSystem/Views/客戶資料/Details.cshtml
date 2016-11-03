@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Details";
+    var items = Model.客戶聯絡人.ToList();
 }
 
 <h2>Details</h2>
@@ -72,3 +73,33 @@
     @Html.ActionLink("編輯", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("返回", "Index")
 </p>
+<hr />
+@using (Html.BeginForm("BatchUpdate", "客戶資料"))
+{
+<h4>客戶聯絡人</h4>
+<table class="table table-bordered">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.客戶聯絡人.FirstOrDefault().職稱)</th>
+        <th>@Html.DisplayNameFor(model => model.客戶聯絡人.FirstOrDefault().姓名)</th>
+        <th>@Html.DisplayNameFor(model => model.客戶聯絡人.FirstOrDefault().Email)</th>
+        <th>@Html.DisplayNameFor(model => model.客戶聯絡人.FirstOrDefault().手機)</th>
+        <th>@Html.DisplayNameFor(model => model.客戶聯絡人.FirstOrDefault().電話)</th>
+    </tr>
+    @for (int i = 0; i < items.Count; i++)
+    {
+    <tr>
+        <td>
+            @Html.HiddenFor(m => items[i].Id)
+            @Html.HiddenFor(m => items[i].姓名)
+            @Html.HiddenFor(m => items[i].Email)
+            @Html.EditorFor(m => items[i].職稱)
+        </td>
+        <td>@items[i].姓名</td>
+        <td>@items[i].Email</td>
+        <td>@Html.EditorFor(m => items[i].手機)</td>
+        <td>@Html.EditorFor(m => items[i].電話)</td>
+    </tr>
+    }
+</table>
+<input type="submit" name="btnBatchUpdate" value="批次更新聯絡人資料" />
+}
