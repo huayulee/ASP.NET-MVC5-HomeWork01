@@ -1,11 +1,13 @@
 ﻿@model CustomerManagementSystem.Models.客戶資料
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "新增客戶資料";
 }
 
-<h2>Create</h2>
-
+@section Dashboard{
+    <li>客戶資料<i class="icon-angle-right"></i></li>
+    <li>@ViewBag.Title</li>
+}
 
 @using (Html.BeginForm()) 
 {
@@ -68,6 +70,22 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.帳號, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.帳號, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.帳號, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.密碼, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.密碼, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.密碼, "", new { @class = "text-danger" })
             </div>
         </div>
 

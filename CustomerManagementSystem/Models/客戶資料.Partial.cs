@@ -38,6 +38,12 @@ namespace CustomerManagementSystem.Models
         [Required]
         public bool Is刪除 { get; set; }
 
+        [StringLength(50, ErrorMessage = "欄位長度不得大於 {1} 個字元")]
+        public string 帳號 { get; set; }
+
+        [DataType(DataType.Password)]
+        public string 密碼 { get; set; }
+
         public Nullable<int> 客戶分類Id { get; set; }
 
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }

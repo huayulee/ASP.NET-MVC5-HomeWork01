@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using CustomerManagementSystem.ActionFilter;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CustomerManagementSystem.Controllers
 {
@@ -35,7 +37,6 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: 客戶資料
-        [HandleError]
         public ActionResult Index(string keyword, int? 客戶分類Id, int page = 1)
         {
             this.GenCustomerList(客戶分類Id);
@@ -43,15 +44,7 @@ namespace CustomerManagementSystem.Controllers
             ViewBag.keyword = keyword;
             int currentPageIndex = page < 1 ? 1 : page;
 
-            try
-            {
-                return View(this.repo.SelectByKeyWord(keyword, 客戶分類Id).ToPagedList(currentPageIndex, this.defaultPageSize));
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            return View(this.repo.SelectByKeyWord(keyword, 客戶分類Id).ToPagedList(currentPageIndex, this.defaultPageSize));
         }
 
         public ActionResult ShowList(int? id, string customerName)
@@ -96,13 +89,13 @@ namespace CustomerManagementSystem.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,客戶分類Id")] 客戶資料 客戶資料)
+        public ActionResult Create([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,客戶分類Id, 帳號, 密碼")] 客戶資料 客戶資料)
         {
             if (ModelState.IsValid)
             {
                 //    db.客戶資料.Add(客戶資料);
                 //    db.SaveChanges();
-
+                客戶資料.密碼 = this.SHA256(客戶資料.密碼);
                 this.repo.Add(客戶資料);
                 this.repo.UnitOfWork.Commit();
 
@@ -128,6 +121,7 @@ namespace CustomerManagementSystem.Controllers
                 return HttpNotFound();
             }
 
+            客戶資料.密碼 = string.Empty;
             this.GenCustomerList(客戶資料.客戶分類Id);
             return View(客戶資料);
         }
@@ -140,8 +134,10 @@ namespace CustomerManagementSystem.Controllers
         public ActionResult Edit(int id, FormCollection form)
         {
             var 客戶資料 = this.repo.Find(id);
+            
             if (TryUpdateModel<客戶資料>(客戶資料))
             {
+                客戶資料.密碼 = this.SHA256(客戶資料.密碼);
                 this.repo.UnitOfWork.Commit();
 
                 return RedirectToAction("Index");
@@ -302,6 +298,19 @@ namespace CustomerManagementSystem.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        private string SHA256(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                return string.Empty;
+            }
+
+            SHA256 sha256 = new SHA256CryptoServiceProvider();//建立一個SHA256
+            byte[] source = Encoding.Default.GetBytes(password);//將字串轉為Byte[]
+            byte[] crypto = sha256.ComputeHash(source);//進行SHA256加密
+            return Convert.ToBase64String(crypto);//把加密後的字串從Byte[]轉為字串
         }
     }
 }
