@@ -5,12 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using CustomerManagementSystem.ActionFilter;
 using CustomerManagementSystem.Models;
 using NPOI.HSSF.UserModel;
 using PagedList;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [ActionTime]
     public class 客戶聯絡人Controller : BaseController
     {
         //private 客戶資料Entities db = new 客戶資料Entities();

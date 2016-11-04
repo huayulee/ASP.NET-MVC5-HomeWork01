@@ -11,9 +11,12 @@ using NPOI.HSSF.UserModel;
 using System.IO;
 using System;
 using System.Collections.Generic;
+using CustomerManagementSystem.ActionFilter;
+using System.Diagnostics;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [ActionTime]
     public class 客戶資料Controller : BaseController
     {
         //private 客戶資料Entities db = new 客戶資料Entities();
@@ -32,13 +35,23 @@ namespace CustomerManagementSystem.Controllers
         }
 
         // GET: 客戶資料
+        [HandleError]
         public ActionResult Index(string keyword, int? 客戶分類Id, int page = 1)
         {
             this.GenCustomerList(客戶分類Id);
             keyword = keyword ?? string.Empty;
             ViewBag.keyword = keyword;
             int currentPageIndex = page < 1 ? 1 : page;
-            return View(this.repo.SelectByKeyWord(keyword, 客戶分類Id).ToPagedList(currentPageIndex, this.defaultPageSize));
+
+            try
+            {
+                return View(this.repo.SelectByKeyWord(keyword, 客戶分類Id).ToPagedList(currentPageIndex, this.defaultPageSize));
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public ActionResult ShowList(int? id, string customerName)

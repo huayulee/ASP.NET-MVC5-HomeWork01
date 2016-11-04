@@ -6,11 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using CustomerManagementSystem.ActionFilter;
 using CustomerManagementSystem.Models;
 using PagedList;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [ActionTime]
+    [HandleError(ExceptionType = typeof(InvalidOperationException),View = "Error_InvalidOperationException")]
     public class 客戶分類Controller : BaseController
     {
         private 客戶分類Repository repo = RepositoryHelper.Get客戶分類Repository();

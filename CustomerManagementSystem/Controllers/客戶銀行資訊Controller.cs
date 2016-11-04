@@ -7,12 +7,14 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using CustomerManagementSystem.ActionFilter;
 using CustomerManagementSystem.Models;
 using NPOI.HSSF.UserModel;
 using PagedList;
 
 namespace CustomerManagementSystem.Controllers
 {
+    [ActionTime]
     public class 客戶銀行資訊Controller : BaseController
     {
         //private 客戶資料Entities db = new 客戶資料Entities();
